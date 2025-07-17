@@ -40,7 +40,6 @@ const UserProfileUpdate = ({ userInfo, isNewUser, onProfileConfigured }) => {
       [name]: value
     }));
     
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -66,7 +65,6 @@ const UserProfileUpdate = ({ userInfo, isNewUser, onProfileConfigured }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    // Validation des champs obligatoires
     if (!profileData.firstName.trim()) {
       newErrors.firstName = 'Le prénom est obligatoire';
     }
@@ -74,7 +72,6 @@ const UserProfileUpdate = ({ userInfo, isNewUser, onProfileConfigured }) => {
       newErrors.lastName = 'Le nom est obligatoire';
     }
 
-    // Validation du mot de passe (obligatoire pour les nouveaux utilisateurs)
     if (isNewUser) {
       if (!profileData.currentPassword) {
         newErrors.currentPassword = 'Le mot de passe actuel est obligatoire';
@@ -102,12 +99,10 @@ const UserProfileUpdate = ({ userInfo, isNewUser, onProfileConfigured }) => {
 
     setIsLoading(true);
     
-    // Simulation de la sauvegarde
     setTimeout(() => {
       setSuccessMessage('Profil mis à jour avec succès !');
       setIsLoading(false);
       
-      // Appeler la fonction de callback après 2 secondes
       setTimeout(() => {
         onProfileConfigured();
       }, 2000);
@@ -125,7 +120,6 @@ const UserProfileUpdate = ({ userInfo, isNewUser, onProfileConfigured }) => {
     <div className="container-fluid">
       <div className="row">
         <div className="col-12">
-          {/* Header */}
           <div className="d-flex justify-content-between align-items-center mb-4">
             <div>
               <h2 className="text-primary fw-bold mb-1">User Profile</h2>
@@ -143,7 +137,6 @@ const UserProfileUpdate = ({ userInfo, isNewUser, onProfileConfigured }) => {
             </button>
           </div>
 
-          {/* Success Message */}
           {successMessage && (
             <div className="alert alert-success d-flex align-items-center mb-4" role="alert">
               <CheckCircle size={20} className="me-2" />
@@ -151,7 +144,6 @@ const UserProfileUpdate = ({ userInfo, isNewUser, onProfileConfigured }) => {
             </div>
           )}
 
-          {/* Main Card */}
           <div className="card shadow-sm">
             <div className="card-header bg-primary text-white">
               <h4 className="mb-0">Account Settings</h4>
@@ -159,7 +151,6 @@ const UserProfileUpdate = ({ userInfo, isNewUser, onProfileConfigured }) => {
             <div className="card-body p-4">
               <form onSubmit={handleSubmit}>
                 <div className="row">
-                  {/* Left Column - Profile Info */}
                   <div className="col-md-8">
                     <div className="row">
                       <div className="col-md-6 mb-3">
@@ -233,7 +224,6 @@ const UserProfileUpdate = ({ userInfo, isNewUser, onProfileConfigured }) => {
                       />
                     </div>
 
-                    {/* Change Password Section */}
                     <div className="border-top pt-4 mt-4">
                       <h5 className="text-primary mb-3">
                         Change Password
@@ -337,7 +327,6 @@ const UserProfileUpdate = ({ userInfo, isNewUser, onProfileConfigured }) => {
                     </div>
                   </div>
 
-                  {/* Right Column - Profile Picture */}
                   <div className="col-md-4">
                     <div className="text-center">
                       <div className="position-relative d-inline-block mb-3">
@@ -399,7 +388,6 @@ const UserProfileUpdate = ({ userInfo, isNewUser, onProfileConfigured }) => {
                   </div>
                 </div>
 
-                {/* Submit Button */}
                 <div className="row mt-4">
                   <div className="col-12">
                     <div className="d-flex justify-content-end">
