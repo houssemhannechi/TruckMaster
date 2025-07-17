@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Truck, Eye, EyeOff } from 'lucide-react';
+import { Truck, Eye, EyeOff, AlertCircle } from 'lucide-react';
 
-const Login = ({ onSwitchToSignup, onSwitchToForgotPassword, onLogin }) => {
+const Login = ({ onLogin, onNavigateTo }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    rememberMe: false
+    rememberMe: false,
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -17,115 +18,160 @@ const Login = ({ onSwitchToSignup, onSwitchToForgotPassword, onLogin }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login attempt:', formData);
-    // Simulation de connexion réussie
-    if (onLogin) {
+    setIsLoading(true);
+    
+    // Simulation d'un délai de connexion
+    setTimeout(() => {
       onLogin(formData);
-    }
+      setIsLoading(false);
+    }, 1000);
   };
-  
 
-  return React.createElement('div', { className: 'auth-full-bg' },
-    React.createElement('div', { className: 'auth-card' },
-      React.createElement('div', { className: 'auth-icon' },
-        React.createElement(Truck, { size: 32 })
-      ),
-      React.createElement('h1', { className: 'auth-title' }, 'Se connecter'),
-      React.createElement('p', { className: 'auth-subtitle' }, 'Connectez-vous à votre espace de gestion'),
-      React.createElement('form', { onSubmit: handleSubmit },
-        React.createElement('div', { className: 'form-group' },
-          React.createElement('label', { className: 'form-label' }, 'Email'),
-          React.createElement('input', {
-            type: 'email',
-            name: 'email',
-            className: 'form-input',
-            placeholder: 'votre.email@entreprise.com',
-            value: formData.email,
-            onChange: handleInputChange,
-            required: true
-          })
-        ),
-        React.createElement('div', { className: 'form-group' },
-          React.createElement('label', { className: 'form-label' }, 'Mot de passe'),
-          React.createElement('div', { style: { position: 'relative' } },
-            React.createElement('input', {
-              type: showPassword ? 'text' : 'password',
-              name: 'password',
-              className: 'form-input',
-              placeholder: '••••••••',
-              value: formData.password,
-              onChange: handleInputChange,
-              required: true,
-              style: { paddingRight: '45px' }
-            }),
-            React.createElement('button', {
-              type: 'button',
-              onClick: () => setShowPassword(!showPassword),
-              style: {
-                position: 'absolute',
-                right: '12px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#7f8c8d'
-              }
-            },
-              React.createElement(showPassword ? EyeOff : Eye, { size: 20 })
-            )
-          )
-        ),
-        React.createElement('div', {
-          style: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '20px'
-          }
-        },
-          React.createElement('div', { className: 'checkbox-container' },
-            React.createElement('input', {
-              type: 'checkbox',
-              name: 'rememberMe',
-              id: 'rememberMe',
-              checked: formData.rememberMe,
-              onChange: handleInputChange
-            }),
-            React.createElement('label', {
-              htmlFor: 'rememberMe',
-              className: 'checkbox-label'
-            }, 'Se souvenir de moi')
-          ),
-          React.createElement('a', {
-            href: '#',
-            className: 'forgot-password',
-            onClick: (e) => {
-              e.preventDefault();
-              onSwitchToForgotPassword && onSwitchToForgotPassword();
-            }
-          }, 'Mot de passe oublié ?')
-        ),
-        React.createElement('button', {
-          type: 'submit',
-          className: 'auth-button'
-        }, 'Se connecter'),
-        React.createElement('p', { className: 'auth-link' },
-          'Pas encore de compte ? ',
-          React.createElement('a', {
-            href: '#',
-            onClick: (e) => {
-              e.preventDefault();
-              onSwitchToSignup && onSwitchToSignup();
-            }
-          }, "S'inscrire")
-        )
-      )
-    )
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    onNavigateTo('forgot-password');
+  };
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    onNavigateTo('signup');
+  };
+
+  return (
+    <div className="min-vh-100 d-flex align-items-center justify-content-center" 
+         style={{ backgroundColor: '#f8f9fa' }}>
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-md-6 col-lg-5 col-xl-4">
+            <div className="card shadow-lg border-0">
+              <div className="card-body p-5">
+                {/* Logo */}
+                <div className="text-center mb-4">
+                  <div className="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                       style={{ width: '60px', height: '60px' }}>
+                    <Truck className="text-white" size={32} />
+                  </div>
+                  <h2 className="fw-bold text-dark">TruckMaster</h2>
+                  <p className="text-muted">Connectez-vous à votre compte</p>
+                </div>
+
+                {/* Info pour les tests */}
+                <div className="alert alert-info" role="alert">
+                  <AlertCircle size={16} className="me-2" />
+                  <small>
+                    <strong>Test :</strong> Utilisez un email contenant "new" ou "nouveau" 
+                    pour simuler un nouvel utilisateur
+                  </small>
+                </div>
+
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label className="form-label fw-medium" htmlFor="email">
+                      Adresse email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="form-control form-control-lg"
+                      placeholder="votre.email@example.com"
+                      required
+                      disabled={isLoading}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label fw-medium" htmlFor="password">
+                      Mot de passe
+                    </label>
+                    <div className="input-group">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        className="form-control form-control-lg"
+                        placeholder="********"
+                        required
+                        disabled={isLoading}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        onClick={() => setShowPassword(!showPassword)}
+                        disabled={isLoading}
+                      >
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="mb-4 d-flex justify-content-between align-items-center">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        id="rememberMe"
+                        name="rememberMe"
+                        checked={formData.rememberMe}
+                        onChange={handleInputChange}
+                        className="form-check-input"
+                        disabled={isLoading}
+                      />
+                      <label className="form-check-label" htmlFor="rememberMe">
+                        Se souvenir de moi
+                      </label>
+                    </div>
+                    <a href="#" onClick={handleForgotPassword} 
+                       className="text-decoration-none text-primary">
+                      Mot de passe oublié?
+                    </a>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-lg w-100 mb-3"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                        Connexion...
+                      </>
+                    ) : (
+                      'Se connecter'
+                    )}
+                  </button>
+                </form>
+
+                <div className="text-center">
+                  <span className="text-muted">Pas encore de compte? </span>
+                  <a href="#" onClick={handleSignUp} 
+                     className="text-decoration-none fw-medium text-primary">
+                    S'inscrire
+                  </a>
+                </div>
+
+                {/* Exemples d'emails pour les tests */}
+                <div className="mt-4 p-3 bg-light rounded">
+                  <small className="text-muted">
+                    <strong>Exemples pour les tests :</strong><br/>
+                    • <code>admin@truckmaster.com</code> - Utilisateur normal<br/>
+                    • <code>new.user@truckmaster.com</code> - Nouvel utilisateur<br/>
+                    • <code>nouveau@truckmaster.com</code> - Nouvel utilisateur
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default Login;
-
